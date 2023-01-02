@@ -1,0 +1,10 @@
+subscription Message {
+	message {
+		id
+		text
+		username
+		avatar
+		createdAt
+		updatedAt
+	}
+}

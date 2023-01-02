@@ -1,0 +1,20 @@
+# this is a docker-compose file for a local development environment
+
+version: '3.9'
+
+services:
+  database:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgrespw
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379

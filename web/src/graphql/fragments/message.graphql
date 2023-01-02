@@ -1,0 +1,8 @@
+fragment MessageRegular on Message {
+	id
+	text
+	createdAt
+	updatedAt
+	username
+	avatar
+}

@@ -1,0 +1,6 @@
+{
+	"typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+	"typescript.inlayHints.parameterTypes.enabled": true,
+	"typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+	"errorLens.statusBarCommand": "goToLine"
+}

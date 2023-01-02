@@ -1,0 +1,8 @@
+query FetchMessages($cursor: Float) {
+	fetchMessages(cursor: $cursor) {
+		messages {
+			...MessageRegular
+		}
+		hasMore
+	}
+}
