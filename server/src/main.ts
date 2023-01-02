@@ -8,7 +8,7 @@ import { UserResolver } from "./resolvers/user.resolver";
 import express from "express";
 import cors from "cors";
 import bp from "body-parser";
-import AppDataSource, { MessageManager, UserManager } from "./lib/datasource";
+import { AppDataSource, MessageManager, UserManager } from "./lib/datasource";
 import session from "express-session";
 import redis from "./lib/redis";
 import connectRedis from "connect-redis";
@@ -21,6 +21,7 @@ import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { makeExecutableSchema } from "@graphql-tools/schema";
+import { serialize } from "./lib/utils";
 
 const bootstrap = async () => {
   const logger = new Logger("Bootstrap");
@@ -37,7 +38,7 @@ const bootstrap = async () => {
     resolvers,
   });
 
-  AppDataSource.initialize()
+  await AppDataSource.initialize()
     .then(() => {
       logger.info(
         `🗄️  Database connected ${blueBright(`(${Date.now() - startTime}ms)`)}`
@@ -47,6 +48,11 @@ const bootstrap = async () => {
       logger.error(`🗄️  Database connection failed, ${error.message}`);
     });
 
+  if (process.env.NODE_ENV === "production") {
+    await AppDataSource.synchronize(false);
+  }
+
+  process.env.USE_PROXY === "true" && app.set("trust proxy", 1);
   app.use(
     session({
       name: COOKIE_NAME,
@@ -57,7 +63,13 @@ const bootstrap = async () => {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
         httpOnly: true,
         sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
+        secure:
+          process.env.NODE_ENV === "production" &&
+          process.env.USE_HTTPS === "true",
+        domain:
+          process.env.NODE_ENV === "production"
+            ? `.${serialize(process.env.CORS_ORIGIN)}`
+            : undefined,
       },
       store: new RedisStore({
         client: redis,
