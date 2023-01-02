@@ -12,8 +12,8 @@
     "importHelpers": true,
     "importsNotUsedAsValues": "error",
     "incremental": true,
-    "lib": ["esnext", "esnext.asynciterable"],
-    "module": "CommonJS",
+    "lib": ["esnext", "esnext.asynciterable", "es2020"],
+    "module": "ESNext",
     "moduleResolution": "Node",
     "newLine": "lf",
     "noEmitHelpers": true,
@@ -27,12 +27,14 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "strict": true,
-    "target": "ES2020",
+    "target": "es2020",
     "useDefineForClassFields": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "types": ["node"]
   },
   "exclude": ["node_modules", "dist"],
   "include": ["src/**/*", "env.d.ts"]
