@@ -62,7 +62,8 @@ const bootstrap = async () => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
         httpOnly: true,
-        sameSite: "lax",
+        // for 2 different domains e.g frontend.vercel.com and backend.railway.app
+        sameSite: process.env.CSRF === "false" ? "none" : "lax",
         secure:
           process.env.NODE_ENV === "production" &&
           process.env.USE_HTTPS === "true",

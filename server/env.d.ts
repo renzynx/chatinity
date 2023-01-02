@@ -8,5 +8,6 @@ declare namespace NodeJS {
     CORS_ORIGIN: string;
     USE_HTTPS: "true" | "false";
     USE_PROXY: "true" | "false";
+    CSRF: "true" | "false";
   }
 }
