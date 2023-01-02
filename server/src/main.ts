@@ -68,7 +68,7 @@ const bootstrap = async () => {
           process.env.USE_HTTPS === "true",
         domain:
           process.env.NODE_ENV === "production"
-            ? `.${serialize(process.env.CORS_ORIGIN)}`
+            ? serialize(process.env.CORS_ORIGIN)
             : undefined,
       },
       store: new RedisStore({
