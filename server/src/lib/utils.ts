@@ -1,3 +1,5 @@
 export const serialize = (s: string) => {
-  return s.replace(/(^\w+:|^)\/\//, "");
+  const url = s.replace(/(^\w+:|^)\/\//, "");
+  const domain = url.split(".").slice(-2).join(".");
+  return domain.replace(/\/$/, "");
 };
