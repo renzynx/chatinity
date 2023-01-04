@@ -1,4 +1,4 @@
-A chat application built with React, NestJS, and GraphQL subscriptions.
+A chat application built with React, Express, and GraphQL subscriptions.
 
 ![preview](https://cdn.amog-us.club/brave_VH7sQC6OZ3.gif)
 
