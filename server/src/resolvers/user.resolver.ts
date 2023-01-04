@@ -1,4 +1,11 @@
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import { UserInput, UserLoginInput, UserResponse } from "../lib/typegraphql";
 import type { MyContext } from "../lib/types";
 import {
@@ -9,6 +16,7 @@ import {
 import argon from "argon2";
 import { User } from "../entities/user.entities";
 import { COOKIE_NAME } from "../lib/constant";
+import { isAuth } from "../middleware/isAuth";
 
 @Resolver()
 export class UserResolver {
@@ -162,13 +170,9 @@ export class UserResolver {
     };
   }
 
+  @UseMiddleware(isAuth)
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req, userManager }: MyContext) {
-    // you are not logged in
-    if (!req.session.userId) {
-      return null;
-    }
-
     const user = await userManager.findOne({
       where: { id: req.session.userId },
     });
@@ -182,6 +186,7 @@ export class UserResolver {
     return userWithoutPassword;
   }
 
+  @UseMiddleware(isAuth)
   @Mutation(() => Boolean)
   logout(@Ctx() { req, res }: MyContext) {
     return new Promise((resolve) =>

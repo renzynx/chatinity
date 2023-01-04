@@ -7,14 +7,17 @@ import {
   Query,
   Resolver,
   Subscription,
+  UseMiddleware,
 } from "type-graphql";
 import { MessageManager } from "../lib/datasource";
 import type { MyContext } from "../lib/types";
 import { Message, PaginatedMessages } from "../lib/typegraphql";
 import type { User } from "../entities/user.entities";
+import { isAuth } from "../middleware/isAuth";
 
 @Resolver()
 export class ChatResolver {
+  @UseMiddleware(isAuth)
   @Query(() => PaginatedMessages)
   async fetchMessages(
     @Arg("cursor", { nullable: true }) cursor: number
@@ -52,6 +55,7 @@ export class ChatResolver {
     };
   }
 
+  @UseMiddleware(isAuth)
   @Mutation(() => Boolean)
   async sendMessage(
     @Arg("message") message: string,
@@ -69,6 +73,7 @@ export class ChatResolver {
     return true;
   }
 
+  @UseMiddleware(isAuth)
   @Subscription(() => Message, {
     topics: "NEW_MESSAGE",
     name: "message",
